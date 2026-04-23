@@ -1,11 +1,5 @@
-// =========================
-// LOAD DATA
-// =========================
 let wallet = JSON.parse(localStorage.getItem("wallet")) || null;
 
-// =========================
-// INIT
-// =========================
 render();
 
 // =========================
@@ -29,11 +23,12 @@ function render() {
         <h3>💼 YOUR WALLET</h3>
 
         <p><b>Username:</b> ${wallet.username}</p>
+
         <p><b>Address:</b></p>
-        <p id="addr">${wallet.address}</p>
+        <div class="addr">${wallet.address}</div>
 
         <button onclick="copyAddr()">📋 COPY ADDRESS</button>
-        <button onclick="reset()">❌ DELETE WALLET</button>
+        <button onclick="resetWallet()">❌ DELETE WALLET</button>
       </div>
     `;
   }
@@ -47,11 +42,11 @@ function createWallet() {
   let pass = document.getElementById("pass").value;
 
   if (!user || !pass) {
-    alert("Isi dulu!");
+    alert("Isi username & password!");
     return;
   }
 
-  let address = "TTM" + Math.random().toString(36).substring(2, 10).toUpperCase();
+  let address = "TTM-" + Math.random().toString(36).substring(2, 10).toUpperCase();
 
   wallet = {
     username: user,
@@ -75,7 +70,7 @@ function copyAddr() {
 // =========================
 // RESET WALLET
 // =========================
-function reset() {
+function resetWallet() {
   localStorage.removeItem("wallet");
   wallet = null;
   render();

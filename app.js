@@ -1,109 +1,82 @@
-let data = JSON.parse(localStorage.getItem("ttm")) || {
-  wallet: null,
-  balance: 0,
-  lastFaucet: 0,
-  clickPower: 1
-};
+// =========================
+// LOAD DATA
+// =========================
+let wallet = JSON.parse(localStorage.getItem("wallet")) || null;
 
-function save() {
-  localStorage.setItem("ttm", JSON.stringify(data));
-}
+// =========================
+// INIT
+// =========================
+render();
 
-// =====================
-// WALLET
-// =====================
-function openWallet() {
-  if (!data.wallet) {
-    document.getElementById("screen").innerHTML = `
-      <h3>Create Wallet</h3>
-      <input id="u" placeholder="username"><br>
-      <input id="p" type="password" placeholder="password"><br>
-      <button onclick="createWallet()">CREATE</button>
+// =========================
+// RENDER UI
+// =========================
+function render() {
+  const app = document.getElementById("app");
+
+  if (!wallet) {
+    app.innerHTML = `
+      <h3>🧪 CREATE WALLET</h3>
+
+      <input id="user" placeholder="username"><br>
+      <input id="pass" type="password" placeholder="password"><br>
+
+      <button onclick="createWallet()">CREATE WALLET</button>
     `;
   } else {
-    document.getElementById("screen").innerHTML = `
-      <h3>💼 WALLET</h3>
-      <p>Address: ${data.wallet}</p>
-      <p>Balance: ${data.balance} TTM</p>
+    app.innerHTML = `
+      <div class="box">
+        <h3>💼 YOUR WALLET</h3>
+
+        <p><b>Username:</b> ${wallet.username}</p>
+        <p><b>Address:</b></p>
+        <p id="addr">${wallet.address}</p>
+
+        <button onclick="copyAddr()">📋 COPY ADDRESS</button>
+        <button onclick="reset()">❌ DELETE WALLET</button>
+      </div>
     `;
   }
 }
 
+// =========================
+// CREATE WALLET
+// =========================
 function createWallet() {
-  let addr = "TTM" + Math.random().toString(36).substring(2,10);
+  let user = document.getElementById("user").value;
+  let pass = document.getElementById("pass").value;
 
-  data.wallet = addr;
-  data.balance = 0;
-
-  save();
-
-  alert("Wallet created: " + addr);
-  openWallet();
-}
-
-// =====================
-// FAUCET
-// =====================
-function openFaucet() {
-  document.getElementById("screen").innerHTML = `
-    <h3>💧 FAUCET</h3>
-    <button onclick="claim()">CLAIM 10 TTM</button>
-  `;
-}
-
-function claim() {
-  let now = Date.now();
-
-  if (now - data.lastFaucet < 43200000) {
-    alert("Wait 12 hours");
+  if (!user || !pass) {
+    alert("Isi dulu!");
     return;
   }
 
-  data.balance += 10;
-  data.lastFaucet = now;
+  let address = "TTM" + Math.random().toString(36).substring(2, 10).toUpperCase();
 
-  save();
+  wallet = {
+    username: user,
+    password: pass,
+    address: address
+  };
 
-  alert("Claimed 10 TTM!");
+  localStorage.setItem("wallet", JSON.stringify(wallet));
+
+  render();
 }
 
-// =====================
-// CLICKER
-// =====================
-function openClicker() {
-  document.getElementById("screen").innerHTML = `
-    <h3>🎮 CLICKER</h3>
-    <button onclick="clickCoin()">CLICK +${data.clickPower}</button>
-    <p>Balance: ${data.balance}</p>
-  `;
+// =========================
+// COPY ADDRESS
+// =========================
+function copyAddr() {
+  navigator.clipboard.writeText(wallet.address);
+  alert("Address copied!");
 }
 
-function clickCoin() {
-  data.balance += data.clickPower;
-  save();
-  openClicker();
-}
-
-// =====================
-// SHOP
-// =====================
-function openShop() {
-  document.getElementById("screen").innerHTML = `
-    <h3>🛒 SHOP</h3>
-    <button onclick="upgrade()">Upgrade Click (+1) - 20 TTM</button>
-  `;
-}
-
-function upgrade() {
-  if (data.balance < 20) {
-    alert("Not enough TTM");
-    return;
-  }
-
-  data.balance -= 20;
-  data.clickPower += 1;
-
-  save();
-
-  alert("Upgraded!");
+// =========================
+// RESET WALLET
+// =========================
+function reset() {
+  localStorage.removeItem("wallet");
+  wallet = null;
+  render();
 }

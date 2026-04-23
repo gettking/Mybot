@@ -3,7 +3,7 @@ from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
 
 TOKEN = "8616432637:AAF5j4AT2vtD7iGSzVujhkrhc53YSaJMjTc"
 
-GAME_URL = "https://username.github.io/repo/"
+GAME_URL = "https://gettking.github.io/Mybot/"
 
 # =========================
 # START COMMAND

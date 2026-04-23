@@ -1,21 +1,51 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>L1 TEST</title>
+  <title>L1 TEST TO MAIN</title>
 
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      background:#0b0f1a;
+      color:#00ff99;
+      font-family:'Press Start 2P';
+      text-align:center;
+    }
+
+    button {
+      margin:5px;
+      padding:10px;
+      background:black;
+      border:2px solid #00ff99;
+      color:#00ff99;
+    }
+
+    input {
+      padding:8px;
+      margin:5px;
+    }
+  </style>
 </head>
 
-<body style="background:black;color:white;text-align:center;">
+<body>
 
-<h1>🧪 L1 TEST TO MAIN</h1>
+<h2>🧪 L1 TEST TO MAIN</h2>
 
-<p>Game sudah jalan di Telegram 🎮</p>
+<div id="menu">
+  <button onclick="openWallet()">💼 Wallet</button>
+  <button onclick="openFaucet()">💧 Faucet</button>
+  <button onclick="openClicker()">🎮 Clicker</button>
+  <button onclick="openShop()">🛒 Shop</button>
+</div>
 
-<script>
-const tg = window.Telegram.WebApp;
-tg.expand();
-</script>
+<hr>
+
+<div id="screen"></div>
+
+<script src="app.js"></script>
 
 </body>
 </html>

@@ -3,7 +3,7 @@ from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
 
 TOKEN = "8616432637:AAF5j4AT2vtD7iGSzVujhkrhc53YSaJMjTc"
 
-URL = "https://USERNAME.github.io/repo/"
+URL = "https://gettking.github.io/Mybot/"
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     keyboard = [

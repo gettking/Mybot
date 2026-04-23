@@ -1,60 +1,42 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Mini App Game</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>L1 SIM</title>
 </head>
 
-<body style="font-family:sans-serif; text-align:center; background:#111; color:white;">
+<body>
 
-<h1>🎮 MINI GAME</h1>
+<h1>🌌 L1 Reality Engine</h1>
 
-<h2>💰 Coin: <span id="coin">0</span></h2>
-<h3>⭐ Level: <span id="level">1</span></h3>
-<h3>⚡ Power: <span id="power">1</span></h3>
-
-<button onclick="clickCoin()" style="padding:15px 30px;font-size:20px;">CLICK 💥</button>
+<h3>Global Stability: <span id="stability"></span></h3>
+<h3>Chaos: <span id="chaos"></span></h3>
+<h3>Day: <span id="day"></span></h3>
 
 <hr>
 
-<h2>🛒 SHOP</h2>
+<div id="logs"></div>
 
-<button onclick="buyPower()">Upgrade Power (50 coin)</button>
+<button onclick="Game.stabilize()">🛠 Stabilize</button>
+
+<script src="engine.js"></script>
 
 <script>
-let coin = localStorage.getItem("coin") ? parseInt(localStorage.getItem("coin")) : 0;
-let level = localStorage.getItem("level") ? parseInt(localStorage.getItem("level")) : 1;
-let power = localStorage.getItem("power") ? parseInt(localStorage.getItem("power")) : 1;
+function updateUI(game){
 
-function update() {
-  document.getElementById("coin").innerText = coin;
-  document.getElementById("level").innerText = level;
-  document.getElementById("power").innerText = power;
+  document.getElementById("stability").innerText =
+    game.global.globalStability.toFixed(1);
 
-  localStorage.setItem("coin", coin);
-  localStorage.setItem("level", level);
-  localStorage.setItem("power", power);
+  document.getElementById("chaos").innerText =
+    game.global.chaos;
+
+  document.getElementById("day").innerText =
+    game.global.day;
+
+  document.getElementById("logs").innerHTML =
+    game.global.events.map(e => "• " + e).join("<br>");
 }
 
-function clickCoin() {
-  coin += power;
-  if (coin >= level * 100) {
-    level++;
-  }
-  update();
-}
-
-function buyPower() {
-  if (coin >= 50) {
-    coin -= 50;
-    power++;
-    update();
-  } else {
-    alert("Coin tidak cukup!");
-  }
-}
-
-update();
+Game.start();
 </script>
 
 </body>

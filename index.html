@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Mini App Game</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body style="font-family:sans-serif; text-align:center; background:#111; color:white;">
+
+<h1>🎮 MINI GAME</h1>
+
+<h2>💰 Coin: <span id="coin">0</span></h2>
+<h3>⭐ Level: <span id="level">1</span></h3>
+<h3>⚡ Power: <span id="power">1</span></h3>
+
+<button onclick="clickCoin()" style="padding:15px 30px;font-size:20px;">CLICK 💥</button>
+
+<hr>
+
+<h2>🛒 SHOP</h2>
+
+<button onclick="buyPower()">Upgrade Power (50 coin)</button>
+
+<script>
+let coin = localStorage.getItem("coin") ? parseInt(localStorage.getItem("coin")) : 0;
+let level = localStorage.getItem("level") ? parseInt(localStorage.getItem("level")) : 1;
+let power = localStorage.getItem("power") ? parseInt(localStorage.getItem("power")) : 1;
+
+function update() {
+  document.getElementById("coin").innerText = coin;
+  document.getElementById("level").innerText = level;
+  document.getElementById("power").innerText = power;
+
+  localStorage.setItem("coin", coin);
+  localStorage.setItem("level", level);
+  localStorage.setItem("power", power);
+}
+
+function clickCoin() {
+  coin += power;
+  if (coin >= level * 100) {
+    level++;
+  }
+  update();
+}
+
+function buyPower() {
+  if (coin >= 50) {
+    coin -= 50;
+    power++;
+    update();
+  } else {
+    alert("Coin tidak cukup!");
+  }
+}
+
+update();
+</script>
+
+</body>
+</html>

@@ -1,22 +1,36 @@
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
+from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, WebAppInfo
 from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
 
 TOKEN = "8616432637:AAF5j4AT2vtD7iGSzVujhkrhc53YSaJMjTc"
 
-URL = "https://gettking.github.io/Mybot/"
+GAME_URL = "https://username.github.io/repo/"
 
+# =========================
+# START COMMAND
+# =========================
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+
     keyboard = [
-        [InlineKeyboardButton("🎮 PLAY GAME", web_app={"url": URL})]
+        [
+            InlineKeyboardButton(
+                "🎮 Play L1 TEST TO MAIN",
+                web_app=WebAppInfo(url=GAME_URL)
+            )
+        ]
     ]
 
+    reply_markup = InlineKeyboardMarkup(keyboard)
+
     await update.message.reply_text(
-        "Klik untuk main game 👇",
-        reply_markup=InlineKeyboardMarkup(keyboard)
+        "🧪 Welcome to L1 TEST TO MAIN\nKlik tombol di bawah untuk masuk game 👇",
+        reply_markup=reply_markup
     )
 
+# =========================
+# RUN BOT
+# =========================
 app = ApplicationBuilder().token(TOKEN).build()
 app.add_handler(CommandHandler("start", start))
 
-print("BOT RUNNING...")
+print("🤖 Bot running...")
 app.run_polling()

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+
+<style>
+body {
+    margin:0;
+    background:#000;
+    color:#0ff;
+    font-family:'Press Start 2P';
+}
+
+/* header */
+.header {
+    text-align:center;
+    padding:10px;
+    animation: glow 1s infinite alternate;
+}
+@keyframes glow {
+    from { text-shadow:0 0 5px #0ff; }
+    to { text-shadow:0 0 20px #0ff; }
+}
+
+/* online */
+.online {
+    text-align:center;
+    font-size:8px;
+}
+
+/* chat */
+.chat {
+    height:65vh;
+    overflow-y:auto;
+    padding:10px;
+}
+
+/* bubble */
+.msg {
+    max-width:70%;
+    padding:8px;
+    margin:5px;
+    border-radius:10px;
+    font-size:10px;
+}
+.left { background:#111; }
+.right { background:#0ff; color:black; margin-left:auto; }
+
+.time {
+    font-size:7px;
+    opacity:0.6;
+}
+
+/* form */
+form {
+    position:fixed;
+    bottom:0;
+    width:100%;
+    background:black;
+    padding:8px;
+}
+
+input {
+    width:40%;
+    padding:8px;
+    margin:4px;
+    background:#111;
+    border:1px solid #0ff;
+    color:#0ff;
+}
+
+button {
+    padding:8px;
+    background:#0ff;
+    border:none;
+    font-family:'Press Start 2P';
+}
+
+@media(max-width:600px){
+    input,button {
+        width:90%;
+        display:block;
+        margin:5px auto;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">⚡ GIXN PRO ⚡</div>
+<div class="online" id="online"></div>
+
+<div class="chat" id="chat"></div>
+
+<form id="form">
+    <input id="name" placeholder="Nama" required>
+    <input id="msg" placeholder="Pesan..." required>
+    <button>Kirim</button>
+</form>
+
+<script>
+let myName = "";
+let lastLen = 0;
+
+document.getElementById("name").addEventListener("change", (e)=>{
+    myName = e.target.value;
+});
+
+// load pesan
+async function load(){
+    let res = await fetch("/messages");
+    let data = await res.json();
+
+    let chat = document.getElementById("chat");
+
+    if(data.length !== lastLen){
+        chat.innerHTML = "";
+
+        data.forEach(m=>{
+            let div = document.createElement("div");
+
+            div.className = "msg " + (m.name === myName ? "right":"left");
+
+            div.innerHTML =
+                "<b>"+m.name+"</b><br>"+
+                m.msg+
+                "<br><span class='time'>"+m.time+"</span>";
+
+            chat.appendChild(div);
+        });
+
+        chat.scrollTop = chat.scrollHeight;
+        lastLen = data.length;
+    }
+}
+
+// online user
+async function loadOnline(){
+    let res = await fetch("/online");
+    let data = await res.json();
+
+    document.getElementById("online").innerHTML =
+        "Online: " + data.join(", ");
+}
+
+// kirim
+document.getElementById("form").onsubmit = async (e)=>{
+    e.preventDefault();
+
+    let name = document.getElementById("name").value;
+    let msg = document.getElementById("msg").value;
+
+    myName = name;
+
+    await fetch("/send", {
+        method:"POST",
+        headers: {"Content-Type":"application/json"},
+        body: JSON.stringify({name:name, msg:msg})
+    });
+
+    document.getElementById("msg").value = "";
+
+    load();
+};
+
+// loop realtime
+setInterval(load, 1200);
+setInterval(loadOnline, 2000);
+
+// initial
+load();
+loadOnline();
+</script>
+
+</body>
+</html>

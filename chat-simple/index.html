@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<body style="background:#111;color:white;font-family:sans-serif;">
+
+<h2>CHAT SIMPLE (PASTI MUNCUL)</h2>
+
+<div style="border:1px solid #444;height:300px;overflow:auto;padding:10px;">
+    {% for m in messages %}
+        <p>{{m}}</p>
+    {% endfor %}
+</div>
+
+<br>
+
+<form method="POST">
+    <input name="name" placeholder="Nama" required>
+    <input name="msg" placeholder="Pesan" required>
+    <button type="submit">Kirim</button>
+</form>
+
+</body>
+</html>
